@@ -22,7 +22,7 @@
 To start the application in dev mode, please run:
 
 ```sh
-git clone https://github.com/tobslob/simpleChart.git
+git clone https://github.com/tobslob/simple-chart.git
 ```
 
 ```sh
