@@ -22,11 +22,11 @@
 To start the application in dev mode, please run:
 
 ```sh
-git clone https://github.com/tobslob/simple-chart.git
+git clone https://github.com/tobslob/sleep-duration-tracker-server.git
 ```
 
 ```sh
-cd simple-chart
+ cd sleep-duration-tracker-server
 ```
 
 ```sh
