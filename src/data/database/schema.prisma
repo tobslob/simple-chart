@@ -14,4 +14,7 @@ model Users {
   gender            String
   sleepTimeDuration Int      @default(0)
   createdAt         DateTime @default(now())
+  count             Int      @default(0)
+
+  @@index([id, emailAddress])
 }

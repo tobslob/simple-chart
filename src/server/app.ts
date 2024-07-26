@@ -13,8 +13,6 @@ const env = process.env.NODE_ENV || "development";
 
 dotenv.config({ path: `.env.${env}` });
 
-console.info(process.env.DATABASE_URL);
-
 export class App {
   private server: InversifyExpressServer;
   constructor() {

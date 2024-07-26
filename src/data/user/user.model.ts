@@ -5,6 +5,7 @@ export interface User extends BaseModel {
   name: string;
   gender: string;
   sleepTimeDuration: number;
+  count: number;
 }
 
 export interface UserDTO {

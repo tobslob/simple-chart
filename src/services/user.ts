@@ -1,50 +1,64 @@
+import { User as UserModel } from "./../data/user/user.model";
 import { UserDTO, User } from "@app/data/user";
 import { config } from "dotenv";
 import { UserRepo } from "@app/data/user/user.repo";
+import moment from "moment";
 
 config();
 
 class UserService {
   constructor() {}
 
-  async createUser(user: UserDTO): Promise<User> {
-    const createdUser = await UserRepo.users.create({
-      data: {
-        emailAddress: user.emailAddress,
-        gender: user.gender,
-        name: user.name,
-        sleepTimeDuration: user.sleepTimeDuration,
+  async createUser(data: UserDTO): Promise<User> {
+    let user: UserModel;
+
+    const date = new Date();
+    const startOfDay = moment(date).startOf("day").toDate();
+    const endOfDay = moment(date).endOf("day").toDate();
+
+    const existingUser = await UserRepo.users.findFirst({
+      where: {
+        emailAddress: data.emailAddress,
+        createdAt: {
+          gte: startOfDay,
+          lt: endOfDay,
+        },
       },
     });
+    const sleepTime = existingUser.sleepTimeDuration + data.sleepTimeDuration;
+    if (sleepTime > 24) {
+      throw new Error("sleepTimeDuration cannot be greater than 24 hours.");
+    }
 
-    return createdUser;
+    if (existingUser) {
+      user = await UserRepo.users.update({
+        where: {
+          id: existingUser.id,
+        },
+        data: {
+          ...existingUser,
+          count: existingUser.count + 1,
+          sleepTimeDuration:
+            existingUser.sleepTimeDuration + data.sleepTimeDuration,
+        },
+      });
+    } else {
+      user = await UserRepo.users.create({
+        data: {
+          emailAddress: data.emailAddress,
+          gender: data.gender,
+          name: data.name,
+          sleepTimeDuration: data.sleepTimeDuration,
+          createdAt: new Date(),
+        },
+      });
+    }
+
+    return user;
   }
 
   async getUsers(): Promise<any> {
-    const userGroups = await UserRepo.users.groupBy({
-      by: ["emailAddress"],
-      _count: {
-        id: true,
-      },
-    });
-
-    const userDetails = await Promise.all(
-      userGroups.map(async (group) => {
-        const user = await UserRepo.users.findFirst({
-          where: { emailAddress: group.emailAddress },
-          select: {
-            name: true,
-            emailAddress: true,
-            gender: true,
-          },
-        });
-        return {
-          ...group,
-          ...user,
-        };
-      })
-    );
-    return userDetails;
+    return await UserRepo.users.findMany();
   }
 
   async getUserByEmail(emailAddress: string): Promise<User[]> {
