@@ -26,7 +26,7 @@ git clone https://github.com/tobslob/simple-chart.git
 ```
 
 ```sh
-cd simpleChart
+cd simple-chart
 ```
 
 ```sh
@@ -39,32 +39,54 @@ cd simpleChart
 
 ## Running using postgres on docker
 
+# ensure you have docker installed and running
+
+To ensure no port 5432 is free.
+
+```sh
+sudo lsof -i:5432
+```
+
+```sh
+sudo kill -15 <pid>
+```
+
 Install PostgreSQL on local machine using the following command:
 
 ```sh
 docker pull postgres
+``````
 
 ## run the postgres image
 
-# ensure you have docker installed and running
-
+```sh
 docker run -d --name dev-postgres \
  --restart=always \
  -e POSTGRES_PASSWORD=secret123 \
  -e POSTGRES_USER=postgres \
  -e POSTGRES_DB=simple-chart \
  -p 5432:5432 postgres
-## check that the container is running
-docker ps
+```
 
+## check that the container is running
+
+```sh
+docker ps
 ```
 
 ```sh
- yarn start:dev
+npx prisma migrate dev --name init
 ```
 
+```sh
+yarn watch
+```
 
-Application is ready to receive connection @ http://localhost:8080
+```sh
+yarn start:dev
+```
+
+Application is ready to receive connection @ <http://localhost:8080>
 
 ## API-ENDPOINTS
 
