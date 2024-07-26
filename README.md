@@ -41,7 +41,7 @@ cd simple-chart
 
 # ensure you have docker installed and running
 
-To ensure no port 5432 is free.
+To ensure port 5432 is free.
 
 ```sh
 sudo lsof -i:5432
