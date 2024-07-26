@@ -115,3 +115,5 @@ curl -X GET "http://localhost:8080/api/v1/users?emailAddress=kazeem.o.odutola@gm
 ```sh
 curl -X GET "http://localhost:8080/api/v1/users"
 ```
+
+![Alt text](image.png)
