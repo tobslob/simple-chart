@@ -25,7 +25,10 @@ class UserService {
         },
       },
     });
-    const sleepTime = existingUser.sleepTimeDuration + data.sleepTimeDuration;
+    const sleepTime = existingUser
+      ? existingUser.sleepTimeDuration + data.sleepTimeDuration
+      : data.sleepTimeDuration;
+    
     if (sleepTime > 24) {
       throw new Error("sleepTimeDuration cannot be greater than 24 hours.");
     }
