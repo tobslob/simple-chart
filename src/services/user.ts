@@ -12,8 +12,6 @@ class UserService {
   async createUser(data: UserDTO): Promise<User> {
     let user: UserModel;
 
-    console.log(data);
-
     const date = new Date(data.date);
     const startOfDay = moment(date).startOf("day").toDate();
     const endOfDay = moment(date).endOf("day").toDate();

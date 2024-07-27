@@ -118,3 +118,8 @@ curl -X GET "http://localhost:8080/api/v1/users"
 ```
 
 ![Alt text](image.png)
+
+## TODO
+
+- Add more unit testing to ensure functions work accordingly
+- Add pagination from the backend, though pagination is been done from the frontend currently.
