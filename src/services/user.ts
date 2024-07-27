@@ -24,24 +24,17 @@ class UserService {
         ],
       },
     });
-    const sleepTime = existingUser
-      ? existingUser.sleepTimeDuration + data.sleepTimeDuration
-      : data.sleepTimeDuration;
-
-    if (sleepTime > 24) {
-      throw new Error("sleepTimeDuration cannot be greater than 24 hours.");
-    }
-
     if (existingUser) {
+      const newSleepTime =
+        existingUser.sleepTimeDuration + data.sleepTimeDuration;
+      if (newSleepTime > 24) {
+        throw new Error("sleepTimeDuration cannot be greater than 24 hours.");
+      }
       user = await UserRepo.users.update({
-        where: {
-          id: existingUser.id,
-        },
+        where: { id: existingUser.id },
         data: {
-          ...existingUser,
           count: existingUser.count + 1,
-          sleepTimeDuration:
-            existingUser.sleepTimeDuration + data.sleepTimeDuration,
+          sleepTimeDuration: newSleepTime,
         },
       });
     } else {
@@ -59,10 +52,10 @@ class UserService {
     return user;
   }
 
-  async getUser(id: string): Promise<User> {
+  async getUser(emailAddress: string): Promise<User> {
     const user = await UserRepo.users.findFirst({
       where: {
-        id,
+        emailAddress: emailAddress,
       },
     });
 
@@ -79,17 +72,18 @@ class UserService {
 
       users = await UserRepo.users.findMany({
         where: {
-          AND: [
-            emailAddress ? { emailAddress } : {},
-            { date: { gte: sevenDaysAgo } },
-          ],
+          AND: [{ emailAddress: emailAddress }, { date: { gt: sevenDaysAgo } }],
         },
         orderBy: {
           date: "asc",
         },
       });
     } else {
-      users = await UserRepo.users.findMany();
+      users = await UserRepo.users.findMany({
+        orderBy: {
+          date: "desc",
+        },
+      });
     }
 
     return users;

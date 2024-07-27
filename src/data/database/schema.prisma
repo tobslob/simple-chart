@@ -16,5 +16,9 @@ model Users {
   count             Int      @default(1)
   date              DateTime @default(now())
 
+
+  @@index([id])
+  @@index([emailAddress])
   @@index([id, emailAddress])
+  @@unique([emailAddress, date])
 }

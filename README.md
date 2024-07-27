@@ -79,6 +79,10 @@ npx prisma migrate dev --name init
 ```
 
 ```sh
+yarn seed:db
+```
+
+```sh
 yarn watch
 ```
 
