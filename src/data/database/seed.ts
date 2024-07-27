@@ -7,7 +7,7 @@ const prisma = new PrismaClient();
 async function main() {
   try {
     const users = await Promise.all(
-      Array.from({ length: 1000 }, async () => {
+      Array.from({ length: 20 }, async () => {
         const time = faker.number.int({ min: 1, max: 8 });
         const email = "kazeem.o.odutola@gmail.com";
         const name = "Kazeem Odutola";
