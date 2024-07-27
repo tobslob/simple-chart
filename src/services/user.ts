@@ -12,14 +12,16 @@ class UserService {
   async createUser(data: UserDTO): Promise<User> {
     let user: UserModel;
 
-    const date = new Date();
+    console.log(data);
+
+    const date = new Date(data.date);
     const startOfDay = moment(date).startOf("day").toDate();
     const endOfDay = moment(date).endOf("day").toDate();
 
     const existingUser = await UserRepo.users.findFirst({
       where: {
         emailAddress: data.emailAddress,
-        createdAt: {
+        date: {
           gte: startOfDay,
           lt: endOfDay,
         },
@@ -28,7 +30,7 @@ class UserService {
     const sleepTime = existingUser
       ? existingUser.sleepTimeDuration + data.sleepTimeDuration
       : data.sleepTimeDuration;
-    
+
     if (sleepTime > 24) {
       throw new Error("sleepTimeDuration cannot be greater than 24 hours.");
     }
@@ -52,7 +54,7 @@ class UserService {
           gender: data.gender,
           name: data.name,
           sleepTimeDuration: data.sleepTimeDuration,
-          createdAt: new Date(),
+          date: new Date(data.date),
         },
       });
     }
@@ -60,21 +62,40 @@ class UserService {
     return user;
   }
 
-  async getUsers(): Promise<any> {
-    return await UserRepo.users.findMany();
-  }
-
-  async getUserByEmail(emailAddress: string): Promise<User[]> {
-    const user = await UserRepo.users.findMany({
+  async getUser(id: string): Promise<User> {
+    const user = await UserRepo.users.findFirst({
       where: {
-        emailAddress,
-        createdAt: {
-          gte: new Date(new Date().setDate(new Date().getDate() - 7)),
-        },
+        id,
       },
     });
 
     return user;
+  }
+
+  async getUsers(emailAddress: string): Promise<User[]> {
+    let users: UserModel[];
+    if (emailAddress) {
+      const sevenDaysAgo = new Date();
+
+      sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+      sevenDaysAgo.setHours(0, 0, 0, 0);
+
+      users = await UserRepo.users.findMany({
+        where: {
+          AND: [
+            emailAddress ? { emailAddress } : {},
+            { date: { gte: sevenDaysAgo } },
+          ],
+        },
+        orderBy: {
+          date: "asc",
+        },
+      });
+    } else {
+      users = await UserRepo.users.findMany();
+    }
+
+    return users;
   }
 }
 

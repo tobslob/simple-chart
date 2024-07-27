@@ -100,7 +100,8 @@ curl -X POST -H "Content-Type: application/json" \
   "emailAddress": "kazeem.o.odutola@gmail.com",
   "name": "Kazeem Odutola",
   "gender": "male",
-  "sleepTimeDuration": 2
+  "sleepTimeDuration": 2,
+  "date": "26-07-26"
 }' http://localhost:8080/api/v1/users
 ```
 

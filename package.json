@@ -10,7 +10,8 @@
     "start:dev": "nodemon ./dist",
     "watch": "tsc --watch -p ./tsconfig.json",
     "build": "tsc -p ./tsconfig.json",
-    "test": "NODE_ENV=test jest --runInBand --detectOpenHandles --forceExit --passWithNoTests"
+    "test": "NODE_ENV=test jest --runInBand --detectOpenHandles --forceExit --passWithNoTests",
+    "seed:db": "node ./dist/data/database/seed.js"
   },
   "dependencies": {
     "@prisma/client": "^4.11.0",

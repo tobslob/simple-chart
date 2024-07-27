@@ -32,18 +32,13 @@ export class UserController extends BaseController<controllerResponse> {
   }
 
   @httpGet("/", validate(isEmail))
-  async getUserByEmail(
+  async getUsers(
     @request() req: Request,
     @response() res: Response,
     @queryParam("emailAddress") emailAddress: string
   ) {
     try {
-      let user: User[];
-      if (emailAddress) {
-        user = await Users.getUserByEmail(emailAddress);
-      } else {
-        user = await Users.getUsers();
-      }
+      const user = await Users.getUsers(emailAddress);
       this.handleSuccess(req, res, user);
     } catch (error) {
       this.handleError(req, res, error);

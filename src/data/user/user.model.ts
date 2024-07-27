@@ -13,4 +13,5 @@ export interface UserDTO {
   name: string;
   gender: string;
   sleepTimeDuration: number;
+  date: Date;
 }

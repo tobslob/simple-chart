@@ -5,6 +5,7 @@ export const isUser = z.object({
   emailAddress: z.string().email(),
   gender: z.string(),
   sleepTimeDuration: z.number().min(1).max(24),
+  date: z.string(),
 });
 
 export const isEmail = z.object({
