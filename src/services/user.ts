@@ -20,11 +20,10 @@ class UserService {
 
     const existingUser = await UserRepo.users.findFirst({
       where: {
-        emailAddress: data.emailAddress,
-        date: {
-          gte: startOfDay,
-          lt: endOfDay,
-        },
+        AND: [
+          { emailAddress: data.emailAddress },
+          { date: { gte: startOfDay, lt: endOfDay } },
+        ],
       },
     });
     const sleepTime = existingUser
